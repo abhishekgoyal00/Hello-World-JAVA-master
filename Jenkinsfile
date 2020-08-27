@@ -38,13 +38,13 @@ pipeline
                 bat "mvn clean install"
             }
         }
-        stage ('Unit Testing')
+        /*stage ('Unit Testing')
         {
             steps
             {
                 bat "mvn test"
             }
-        }
+        }*/
         stage ('Sonar Analysis')
         {
             steps
@@ -78,30 +78,30 @@ pipeline
                 bat returnStdout: true, script: 'docker build -t abhigoyaldev/my-app:%BUILD_NUMBER% -f Dockerfile .'
             }
         }
-            /*stage ('Push to DTR') {         
+            stage ('Containers - Push to DTR') {         
             steps{  
                 withCredentials([string(credentialsId: 'docker-pwd', variable: 'dockerHubPwd')]) {
                     bat returnStdout: true, script: "docker login -u abhigoyaldev -p ${dockerHubPwd}"
                 }
                 bat returnStdout: true, script: 'docker push abhigoyaldev/my-app:%BUILD_NUMBER%'
             }
-        }*/
-            stage('Stop Running container') {
+        }
+            /*stage('Stop Running container') {
             steps {
                 bat '''@echo off for / f "tokens=*" % % my-app in ('docker ps -q --filter "name=abhigoyaldev/my-app"') do docker stop % % my-app && docker rm --force % % my-app || exit / b 0 '''
             }
-        }
+        }*/
             stage('Docker deployment') {
             steps {
                 bat 'docker run --name my-app -d -p 5016:8080 abhigoyaldev/my-app:%BUILD_NUMBER%'
             }
         }
     }
-    post {
+    /*post {
         always {
             emailext attachmentsPattern: 'report.html', body: '${JELLY_SCRIPT,template="health"}', mimeType: 'text/html', recipientProviders: [
                 [$class: 'RequesterRecipientProvider']
             ], replyTo: 'abhishek.goyal@nagarro.com', subject: '$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!', to: 'abhishek.goyal@nagarro.com'
         }
-    }
+    }*/
 }
