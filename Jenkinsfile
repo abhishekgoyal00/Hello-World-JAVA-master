@@ -78,14 +78,14 @@ pipeline
                 bat returnStdout: true, script: 'docker build -t abhigoyaldev/my-app:%BUILD_NUMBER% -f Dockerfile .'
             }
         }
-            stage ('Container - Push to DTR') {         
+            /*stage ('Container - Push to DTR') {         
             steps{  
                 withCredentials([string(credentialsId: 'docker-pwd', variable: 'dockerHubPwd')]) {
                     bat returnStdout: true, script: "docker login -u abhigoyaldev -p ${dockerHubPwd}"
                 }
                 bat returnStdout: true, script: 'docker push abhigoyaldev/my-app:%BUILD_NUMBER%'
             }
-        }
+        }*/
             stage('Stop Running container') {
             steps {
                 bat '''@echo off for / f "tokens=*" % % my-app in ('docker ps -q --filter "name=abhigoyaldev/my-app"') do docker stop % % my-app && docker rm --force % % my-app || exit / b 0 '''
