@@ -78,6 +78,7 @@ pipeline
                 bat returnStdout: true, script: 'docker build -t abhigoyaldev/i_abhishekgoyal_develop:%BUILD_NUMBER% -f Dockerfile .'
             }
         }
+        
             /*stage ('Containers - Push to DTR') {         
             steps{  
                 withCredentials([string(credentialsId: 'docker-pwd', variable: 'dockerHubPwd')]) {
