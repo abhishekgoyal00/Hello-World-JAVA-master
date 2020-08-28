@@ -60,8 +60,8 @@ pipeline
                 rtMavenDeployer(
                     id: 'deployer',
                     serverId: '123456789@artifactory',
-                    releaseRepo: 'abhigoyal_release',
-                    snapshotRepo: 'abhigoyal_snapshot'
+                    releaseRepo: 'CI-Automation-JAVA',
+                    snapshotRepo: 'CI-Automation-JAVA'
                 )
                 rtMavenRun(
                     pom: 'pom.xml',
@@ -75,7 +75,7 @@ pipeline
         }
             stage('Docker Image') {
             steps {
-                bat returnStdout: true, script: 'docker build -t abhigoyaldev/my-app:%BUILD_NUMBER% -f Dockerfile .'
+                bat returnStdout: true, script: 'docker build -t dtr.nagarro.com:443/i_abhishekgoyal_develop:${BUILD_NUMBER} -f Dockerfile .'
             }
         }
             /*stage ('Containers - Push to DTR') {         
@@ -86,14 +86,21 @@ pipeline
                 bat returnStdout: true, script: 'docker push abhigoyaldev/my-app:%BUILD_NUMBER%'
             }
         }*/
+        stage ('Containers - Push to DTR')
+        {
+            steps
+            {
+                bat returnStdout: true, script: '/bin/docker push dtr.nagarro.com:443/i_abhishekgoyal_develop:${BUILD_NUMBER}'
+            }
+        }
             stage('Stop Running container') {
             steps {
-                bat '''@echo off for / f "tokens=*" % % my-app in ('docker ps -q --filter "name=abhigoyaldev/my-app"') do docker stop % % my-app && docker rm --force % % my-app || exit / b 0 '''
+                bat '''@echo off for / f "tokens=*" % % i_abhishekgoyal_develop in ('docker ps -q --filter "name=dtr.nagarro.com:443/i_abhishekgoyal_develop"') do docker stop % % i_abhishekgoyal_develop && docker rm --force % % i_abhishekgoyal_develop || exit / b 0 '''
             }
         }
             stage('Docker deployment') {
             steps {
-                bat 'docker run --name my-app -d -p 5016:8080 abhigoyaldev/my-app:%BUILD_NUMBER%'
+                bat 'docker run --name i_abhishekgoyal_develop -d -p 6100:8080 dtr.nagarro.com:443/i_abhishekgoyal_develop:%BUILD_NUMBER%'
             }
         }
     }
