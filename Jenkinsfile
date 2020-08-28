@@ -78,21 +78,21 @@ pipeline
                 bat returnStdout: true, script: 'docker build -t dtr.nagarro.com:443/i_abhishekgoyal_develop:%BUILD_NUMBER% -f Dockerfile .'
             }
         }
-            /*stage ('Containers - Push to DTR') {         
+            stage ('Containers - Push to DTR') {         
             steps{  
                 withCredentials([string(credentialsId: 'docker-pwd', variable: 'dockerHubPwd')]) {
                     bat returnStdout: true, script: "docker login -u abhigoyaldev -p ${dockerHubPwd}"
                 }
-                bat returnStdout: true, script: 'docker push abhigoyaldev/my-app:%BUILD_NUMBER%'
+                bat returnStdout: true, script: 'docker push dtr.nagarro.com:443/i_abhishekgoyal_develop:%BUILD_NUMBER%'
             }
-        }*/
-        stage ('Containers - Push to DTR')
+        }
+        /*stage ('Containers - Push to DTR')
         {
             steps
             {
                 bat returnStdout: true, script: '/bin/docker push dtr.nagarro.com:443/i_abhishekgoyal_develop:${BUILD_NUMBER}'
             }
-        }
+        }*/
             stage('Stop Running container') {
             steps {
                 bat '''@echo off for / f "tokens=*" % % i_abhishekgoyal_develop in ('docker ps -q --filter "name=dtr.nagarro.com:443/i_abhishekgoyal_develop"') do docker stop % % i_abhishekgoyal_develop && docker rm --force % % i_abhishekgoyal_develop || exit / b 0 '''
