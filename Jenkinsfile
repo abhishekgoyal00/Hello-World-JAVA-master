@@ -75,7 +75,7 @@ pipeline
         }
             stage('Docker Image') {
             steps {
-                bat returnStdout: true, script: 'docker build -t dtr.nagarro.com:443/i_abhishekgoyal_develop:${BUILD_NUMBER} -f Dockerfile .'
+                bat returnStdout: true, script: 'docker build -t abhigoyaldev/i_abhishekgoyal_develop:${BUILD_NUMBER} -f Dockerfile .'
             }
         }
             /*stage ('Containers - Push to DTR') {         
