@@ -87,11 +87,11 @@ pipeline
                 bat returnStdout: true, script: 'docker push abhigoyaldev/iam:%BUILD_NUMBER%'
             }
         }*/
-        /*stage('Stop Running container') {
+        stage('Stop Running container') {
             steps {
                 bat '''@echo off for / f "tokens=*" % % iam in ('docker ps -q --filter "name=abhigoyaldev/iam"') do docker stop % % iam && docker rm --force % % iam || exit / b 0 '''
             }
-        }*/
+        }
             stage('Docker deployment') {
             steps {
                 bat 'docker run --name iam -d -p 6100:8080 abhigoyaldev/iam:%BUILD_NUMBER%'
