@@ -94,7 +94,7 @@ pipeline
         }
             stage('Docker deployment') {
             steps {
-                bat 'docker run --name iam -d -p 6100:8080 abhigoyaldev/iam:%BUILD_NUMBER%'
+                bat 'docker run --name iam -d -p 6101:8080 abhigoyaldev/iam:%BUILD_NUMBER%'
             }
         }
     }
