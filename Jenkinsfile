@@ -79,14 +79,14 @@ pipeline
             }
         }
 
-            stage ('Containers - Push to DTR') {         
+            /*stage ('Containers - Push to DTR') {         
             steps{  
                 withCredentials([string(credentialsId: 'docker-pwd', variable: 'dockerHubPwd')]) {
                     bat returnStdout: true, script: "docker login -u abhigoyaldev -p ${dockerHubPwd}"
                 }
                 bat returnStdout: true, script: 'docker push abhigoyaldev/iam:%BUILD_NUMBER%'
             }
-        }
+        }*/
         /*stage('Stop Running container') {
             steps {
                 bat '''@echo off for / f "tokens=*" % % iam in ('docker ps -q --filter "name=abhigoyaldev/iam"') do docker stop % % iam && docker rm --force % % iam || exit / b 0 '''
