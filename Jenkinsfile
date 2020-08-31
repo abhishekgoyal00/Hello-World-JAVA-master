@@ -86,11 +86,11 @@ pipeline
                 bat returnStdout: true, script: 'docker push abhigoyaldev/i-abhishekgoyal-master:%BUILD_NUMBER%'
             }
         }*/
-           /*stage('Stop Running container') {
+           stage('Stop Running container') {
             steps {
                 bat '''@echo off for / f "tokens=*" % % i-abhishekgoyal-master in ('docker ps -q --filter "name=abhigoyaldev/i-abhishekgoyal-master"') do docker stop % % i-abhishekgoyal-master && docker rm --force % % i-abhishekgoyal-master || exit / b 0 '''
             }
-        }*/
+        }
             stage('Docker deployment') {
             steps {
                 bat 'docker run --name i-abhishekgoyal-master -d -p 6000:8080 abhigoyaldev/i-abhishekgoyal-master:%BUILD_NUMBER%'
