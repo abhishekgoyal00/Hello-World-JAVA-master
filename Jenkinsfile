@@ -98,7 +98,7 @@ pipeline
         }*/
         stage('helm deployment') {
             steps {
-                bat 'kubectl create namespace nss1'
+                bat 'kubectl version'
             }
         }
     }
