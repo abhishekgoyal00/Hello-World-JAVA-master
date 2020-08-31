@@ -75,7 +75,7 @@ pipeline
         }
             stage('Docker Image') {
             steps {
-                bat returnStdout: true, script: 'docker build -t abhigoyaldev/i_abhishekgoyal_master:%BUILD_NUMBER% -f Dockerfile .'
+                bat returnStdout: true, script: 'docker build -t abhigoyaldev/i-abhishekgoyal-master:%BUILD_NUMBER% -f Dockerfile .'
             }
         }
             /*stage ('Container - Push to DTR') {         
@@ -83,17 +83,17 @@ pipeline
                 withCredentials([string(credentialsId: 'docker-pwd', variable: 'dockerHubPwd')]) {
                     bat returnStdout: true, script: "docker login -u abhigoyaldev -p ${dockerHubPwd}"
                 }
-                bat returnStdout: true, script: 'docker push abhigoyaldev/i_abhishekgoyal_master:%BUILD_NUMBER%'
+                bat returnStdout: true, script: 'docker push abhigoyaldev/i-abhishekgoyal-master:%BUILD_NUMBER%'
             }
         }*/
-           stage('Stop Running container') {
+           /*stage('Stop Running container') {
             steps {
-                bat '''@echo off for / f "tokens=*" % % i_abhishekgoyal_master in ('docker ps -q --filter "name=abhigoyaldev/i_abhishekgoyal_master"') do docker stop % % i_abhishekgoyal_master && docker rm --force % % i_abhishekgoyal_master || exit / b 0 '''
+                bat '''@echo off for / f "tokens=*" % % i-abhishekgoyal-master in ('docker ps -q --filter "name=abhigoyaldev/i-abhishekgoyal-master"') do docker stop % % i-abhishekgoyal-master && docker rm --force % % i-abhishekgoyal-master || exit / b 0 '''
             }
-        }
+        }*/
             stage('Docker deployment') {
             steps {
-                bat 'docker run --name i_abhishekgoyal_master -d -p 6000:8080 abhigoyaldev/i_abhishekgoyal_master:%BUILD_NUMBER%'
+                bat 'docker run --name i-abhishekgoyal-master -d -p 6000:8080 abhigoyaldev/i-abhishekgoyal-master:%BUILD_NUMBER%'
             }
         }
     }
