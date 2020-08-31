@@ -75,7 +75,7 @@ pipeline
         }
             stage('Docker Image') {
             steps {
-                bat returnStdout: true, script: 'docker build -t abhigoyaldev/iam:%BUILD_NUMBER% -f Dockerfile .'
+                bat returnStdout: true, script: 'docker build -t abhigoyaldev/i-abhishekgoyal-develop:%BUILD_NUMBER% -f Dockerfile .'
             }
         }
 
@@ -84,17 +84,17 @@ pipeline
                 withCredentials([string(credentialsId: 'docker-pwd', variable: 'dockerHubPwd')]) {
                     bat returnStdout: true, script: "docker login -u abhigoyaldev -p ${dockerHubPwd}"
                 }
-                bat returnStdout: true, script: 'docker push abhigoyaldev/iam:%BUILD_NUMBER%'
+                bat returnStdout: true, script: 'docker push abhigoyaldev/i-abhishekgoyal-develop:%BUILD_NUMBER%'
             }
         }*/
-        stage('Stop Running container') {
+        /*stage('Stop Running container') {
             steps {
-                bat '''@echo off for / f "tokens=*" % % iam in ('docker ps -q --filter "name=abhigoyaldev/iam"') do docker stop % % iam && docker rm --force % % iam || exit / b 0 '''
+                bat '''@echo off for / f "tokens=*" % % i-abhishekgoyal-develop in ('docker ps -q --filter "name=abhigoyaldev/i-abhishekgoyal-develop"') do docker stop % % i-abhishekgoyal-develop && docker rm --force % % i-abhishekgoyal-develop || exit / b 0 '''
             }
-        }
+        }*/
             stage('Docker deployment') {
             steps {
-                bat 'docker run --name iam -d -p 6101:8080 abhigoyaldev/iam:%BUILD_NUMBER%'
+                bat 'docker run --name i-abhishekgoyal-develop -d -p 6101:8080 abhigoyaldev/i-abhishekgoyal-develop:%BUILD_NUMBER%'
             }
         }
     }
