@@ -55,7 +55,7 @@ pipeline
                 }
             }
         }*/
-            stage('Upload to Artifactory') {
+            /*stage('Upload to Artifactory') {
             steps {
                 rtMavenDeployer(
                     id: 'deployer',
@@ -77,7 +77,7 @@ pipeline
             steps {
                 bat returnStdout: true, script: 'docker build -t abhigoyaldev/i-abhishekgoyal-master:%BUILD_NUMBER% -f Dockerfile .'
             }
-        }
+        }*/
             /*stage ('Container - Push to DTR') {         
             steps{  
                 withCredentials([string(credentialsId: 'docker-pwd', variable: 'dockerHubPwd')]) {
@@ -86,7 +86,7 @@ pipeline
                 bat returnStdout: true, script: 'docker push abhigoyaldev/i-abhishekgoyal-master:%BUILD_NUMBER%'
             }
         }*/
-           stage('Stop Running container') {
+           /*stage('Stop Running container') {
             steps {
                 bat '''@echo off for / f "tokens=*" % % i-abhishekgoyal-master in ('docker ps -q --filter "name=abhigoyaldev/i-abhishekgoyal-master"') do docker stop % % i-abhishekgoyal-master && docker rm --force % % i-abhishekgoyal-master || exit / b 0 '''
             }
@@ -95,7 +95,7 @@ pipeline
             steps {
                 bat 'docker run --name i-abhishekgoyal-master -d -p 6000:8080 abhigoyaldev/i-abhishekgoyal-master:%BUILD_NUMBER%'
             }
-        }
+        }*/
         stage('helm deployment') {
             steps {
                 bat 'kubectl create namespace nss1'
