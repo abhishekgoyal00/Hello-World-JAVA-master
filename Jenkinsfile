@@ -98,7 +98,7 @@ pipeline
         }*/
         stage('helm deployment') {
             steps {
-                bat 'kubectl version'
+                bat 'kubectl create deployment hell --image abhigoyaldev/i-abhishekgoyal-master:13'
             }
         }
     }
