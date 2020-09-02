@@ -55,7 +55,7 @@ pipeline
                 }
             }
         }*/
-            /*stage('Upload to Artifactory') {
+            stage('Upload to Artifactory') {
             steps {
                 rtMavenDeployer(
                     id: 'deployer',
@@ -75,9 +75,32 @@ pipeline
         }
             stage('Docker Image') {
             steps {
-                bat returnStdout: true, script: 'docker build -t abhigoyaldev/i-abhishekgoyal-master:%BUILD_NUMBER% -f Dockerfile .'
+                bat returnStdout: true, script: 'docker build -t dtr.nagarro.com:443/i-abhishekgoyal-master:%BUILD_NUMBER% -f Dockerfile .'
             }
-        }*/
+        }
+
+
+        stage('Containers'){
+            parallel{
+                stage('PrecontainerCheck'){
+                    steps{
+                        script{
+                            containerId = powershell(script:'docker ps --filter name=c-abhishekgoyal-master --format "{{.ID}}"', returnStdout:true, label:'')
+                            if(containerId){
+                                bat "docker stop ${containerId}"
+                                bat "docker rm -f ${containerId}"
+                            }
+                        }   
+                    }
+                }
+                stage('Push Image to DTR'){
+                    steps{
+                        bat returnStdout: true, script: 'docker push dtr.nagarro.com:443/i-abhishekgoyal-master:%BUILD_NUMBER%'
+                    }
+                }
+            }    
+        }
+
             /*stage ('Container - Push to DTR') {         
             steps{  
                 withCredentials([string(credentialsId: 'docker-pwd', variable: 'dockerHubPwd')]) {
@@ -90,23 +113,17 @@ pipeline
             steps {
                 bat '''@echo off for / f "tokens=*" % % i-abhishekgoyal-master in ('docker ps -q --filter "name=abhigoyaldev/i-abhishekgoyal-master"') do docker stop % % i-abhishekgoyal-master && docker rm --force % % i-abhishekgoyal-master || exit / b 0 '''
             }
-        }
-            stage('Docker deployment') {
-            steps {
-                bat 'docker run --name i-abhishekgoyal-master -d -p 6000:8080 abhigoyaldev/i-abhishekgoyal-master:%BUILD_NUMBER%'
-            }
         }*/
+        stage('Docker deployment') {
+            steps {
+                bat 'docker run --name c-abhishekgoyal-master -d -p 6000:8080 dtr.nagarro.com:443/i-abhishekgoyal-master:%BUILD_NUMBER%'
+            }
+        }
         stage('helm deployment') {
             steps {
-                bat 'kubectl create deployment hell --image abhigoyaldev/i-abhishekgoyal-master:13'
+                bat 'kubectl create ns abhishek-master'
+                bat 'helm install java-deployment-master my-chart --set image=dtr.nagarro.com:443/i-abhishekgoyal-master:%BUILD_NUMBER% -n abhishek-master'
             }
         }
     }
-    /*post {
-        always {
-            emailext attachmentsPattern: 'report.html', body: '${JELLY_SCRIPT,template="health"}', mimeType: 'text/html', recipientProviders: [
-                [$class: 'RequesterRecipientProvider']
-            ], replyTo: 'abhishek.goyal@nagarro.com', subject: '$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!', to: 'abhishek.goyal@nagarro.com'
-        }
-    }*/ 
 }
