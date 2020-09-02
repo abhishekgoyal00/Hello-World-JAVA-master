@@ -75,7 +75,7 @@ pipeline
         }
             stage('Docker Image') {
             steps {
-                bat returnStdout: true, script: 'docker build -t abhigoyaldev/i-abhishekgoyal-develop:%BUILD_NUMBER% -f Dockerfile .'
+                bat returnStdout: true, script: 'docker build -t dtr.nagarro.com:443/i-abhishekgoyal-develop:%BUILD_NUMBER% -f Dockerfile .'
             }
         }
 
@@ -87,22 +87,43 @@ pipeline
                 bat returnStdout: true, script: 'docker push abhigoyaldev/i-abhishekgoyal-develop:%BUILD_NUMBER%'
             }
         }*/
-        stage('Stop Running container') {
+
+        stage('Containers'){
+            parallel{
+                stage('PrecontainerCheck'){
+                    steps{
+                        script{
+                            containerId = powershell(script:'docker ps --filter name=c-abhishekgoyal-develop --format "{{.ID}}"', returnStdout:true, label:'')
+                            if(containerId){
+                                bat "docker stop ${containerId}"
+                                bat "docker rm -f ${containerId}"
+                            }
+                        }   
+                    }
+                }
+                stage('Push Image to DTR'){
+                    steps{
+                        bat returnStdout: true, script: 'docker push dtr.nagarro.com:443/i-abhishekgoyal-develop:%BUILD_NUMBER%'
+                    }
+                }
+            }    
+        }
+
+        /*stage('Stop Running container') {
             steps {
                 bat '''@echo off for / f "tokens=*" % % i-abhishekgoyal-develop in ('docker ps -q --filter "name=abhigoyaldev/i-abhishekgoyal-develop"') do docker stop % % i-abhishekgoyal-develop && docker rm --force % % i-abhishekgoyal-develop || exit / b 0 '''
             }
-        }
+        }*/
             stage('Docker deployment') {
             steps {
-                bat 'docker run --name i-abhishekgoyal-develop -d -p 6101:8080 abhigoyaldev/i-abhishekgoyal-develop:%BUILD_NUMBER%'
+                bat 'docker run --name c-abhishekgoyal-develop -d -p 6100:8080 dtr.nagarro.com:443/i-abhishekgoyal-develop:%BUILD_NUMBER%'
+            }
+        }
+          stage('helm deployment') {
+            steps {
+                bat 'kubectl create ns abhishek-develop'
+                bat 'helm install java-deployment-develop my-chart --set image=dtr.nagarro.com:443/i-abhishekgoyal-develop:%BUILD_NUMBER% -n abhishek-develop'
             }
         }
     }
-    /*post {
-        always {
-            emailext attachmentsPattern: 'report.html', body: '${JELLY_SCRIPT,template="health"}', mimeType: 'text/html', recipientProviders: [
-                [$class: 'RequesterRecipientProvider']
-            ], replyTo: 'abhishek.goyal@nagarro.com', subject: '$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!', to: 'abhishek.goyal@nagarro.com'
-        }
-    }*/
 }
