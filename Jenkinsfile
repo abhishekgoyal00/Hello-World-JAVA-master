@@ -114,7 +114,7 @@ pipeline
                 bat '''@echo off for / f "tokens=*" % % i-abhishekgoyal-develop in ('docker ps -q --filter "name=abhigoyaldev/i-abhishekgoyal-develop"') do docker stop % % i-abhishekgoyal-develop && docker rm --force % % i-abhishekgoyal-develop || exit / b 0 '''
             }
         }*/
-            stage('Docker deployment') {
+        stage('Docker deployment') {
             steps {
                 bat 'docker run --name c-abhishekgoyal-develop -d -p 6100:8080 dtr.nagarro.com:443/i-abhishekgoyal-develop:%BUILD_NUMBER%'
             }
