@@ -93,11 +93,11 @@ pipeline
                         }   
                     }
                 }
-                stage('Push Image to DTR'){
+                /*stage('Push Image to DTR'){
                     steps{
                         bat returnStdout: true, script: 'docker push dtr.nagarro.com:443/i-abhishekgoyal-master:%BUILD_NUMBER%'
                     }
-                }
+                }*/
             }    
         }
 
