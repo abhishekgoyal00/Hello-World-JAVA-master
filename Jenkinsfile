@@ -108,7 +108,6 @@ pipeline
                 }*/
             }    
         }
-
         /*stage('Stop Running container') {
             steps {
                 bat '''@echo off for / f "tokens=*" % % i-abhishekgoyal-develop in ('docker ps -q --filter "name=abhigoyaldev/i-abhishekgoyal-develop"') do docker stop % % i-abhishekgoyal-develop && docker rm --force % % i-abhishekgoyal-develop || exit / b 0 '''
