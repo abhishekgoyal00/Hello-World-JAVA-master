@@ -101,7 +101,7 @@ pipeline
             }    
         }
 
-            /*stage ('Container - Push to DTR') {         
+        /*stage ('Container - Push to DTR') {         
             steps{  
                 withCredentials([string(credentialsId: 'docker-pwd', variable: 'dockerHubPwd')]) {
                     bat returnStdout: true, script: "docker login -u abhigoyaldev -p ${dockerHubPwd}"
