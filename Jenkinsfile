@@ -24,17 +24,18 @@ pipeline
     }
     stages
     {
-        stage ('checkout')
+        /*stage ('checkout')
         {
             steps
             {
                 checkout scm
             }
-        }
+        }*/
         stage ('Build')
         {
             steps
             {
+                checkout scm
                 bat "mvn clean install"
             }
         }
@@ -118,7 +119,7 @@ pipeline
                 bat 'docker run --name c-abhishekgoyal-develop -d -p 6100:8080 dtr.nagarro.com:443/i-abhishekgoyal-develop:%BUILD_NUMBER%'
             }
         }
-          stage('helm deployment') {
+          stage('Helm Chart Deployment') {
             steps {
                 bat 'kubectl create ns abhishek-develop'
                 bat 'helm install java-deployment-develop my-chart --set image=dtr.nagarro.com:443/i-abhishekgoyal-develop:%BUILD_NUMBER% -n abhishek-develop'
