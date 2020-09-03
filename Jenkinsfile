@@ -24,17 +24,18 @@ pipeline
     }
     stages
     {
-        stage ('checkout')
+        /*stage ('checkout')
         {
             steps
             {
                 checkout scm
             }
-        }
+        }*/
         stage ('Build')
         {
             steps
             {
+                checkout scm
                 bat "mvn clean install"
             }
         }
@@ -93,11 +94,11 @@ pipeline
                         }   
                     }
                 }
-                /*stage('Push Image to DTR'){
+                stage('Push Image to DTR'){
                     steps{
                         bat returnStdout: true, script: 'docker push dtr.nagarro.com:443/i-abhishekgoyal-master:%BUILD_NUMBER%'
                     }
-                }*/
+                }
             }    
         }
 
@@ -119,7 +120,7 @@ pipeline
                 bat 'docker run --name c-abhishekgoyal-master -d -p 6000:8080 dtr.nagarro.com:443/i-abhishekgoyal-master:%BUILD_NUMBER%'
             }
         }
-        stage('helm deployment') {
+        stage('Helm Chart Deployment') {
             steps {
                 bat 'kubectl create ns abhishek-master'
                 bat 'helm install java-deployment-master my-chart --set image=dtr.nagarro.com:443/i-abhishekgoyal-master:%BUILD_NUMBER% -n abhishek-master'
