@@ -76,7 +76,7 @@ pipeline
         }
             stage('Docker Image') {
             steps {
-                bat returnStdout: true, script: 'docker build -t dtr.nagarro.com:443/i-abhishekgoyal-master:%BUILD_NUMBER% -f Dockerfile .'
+                bat returnStdout: true, script: 'docker build -t dtr.nagarro.com:443/i-abhishekgoyal-master -f Dockerfile .'
             }
         }
 
@@ -96,7 +96,7 @@ pipeline
                 }
                 stage('Push Image to DTR'){
                     steps{
-                        bat returnStdout: true, script: 'docker push dtr.nagarro.com:443/i-abhishekgoyal-master:%BUILD_NUMBER%'
+                        bat returnStdout: true, script: 'docker push dtr.nagarro.com:443/i-abhishekgoyal-master'
                     }
                 }
             }    
@@ -117,13 +117,13 @@ pipeline
         }*/
         stage('Docker deployment') {
             steps {
-                bat 'docker run --name c-abhishekgoyal-master -d -p 6000:8080 dtr.nagarro.com:443/i-abhishekgoyal-master:%BUILD_NUMBER%'
+                bat 'docker run --name c-abhishekgoyal-master -d -p 6000:8080 dtr.nagarro.com:443/i-abhishekgoyal-master'
             }
         }
         stage('Helm Chart Deployment') {
             steps {
                 bat 'kubectl create ns abhishek-master'
-                bat 'helm install java-deployment-master my-chart --set image=dtr.nagarro.com:443/i-abhishekgoyal-master:%BUILD_NUMBER% -n abhishek-master'
+                bat 'helm install java-deployment-master my-chart --set image=dtr.nagarro.com:443/i-abhishekgoyal-master -n abhishek-master'
             }
         }
     }
