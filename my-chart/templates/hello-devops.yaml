@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: tomcat
-        image: dtr.nagarro.com:443/i-abhishekgoyal-develop:24
+        image: dtr.nagarro.com:443/i-abhishekgoyal-develop
         ports:
         - containerPort: 8080
 ---
