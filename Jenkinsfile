@@ -102,7 +102,7 @@ pipeline
                         }   
                     }
                 }
-                stage('Push Image to DTR'){
+                stage('PushtoDTR'){
                     steps{
                         bat returnStdout: true, script: 'docker push dtr.nagarro.com:443/i-abhishekgoyal-develop'
                     }
