@@ -91,7 +91,8 @@ pipeline
         }
         stage('Helm Chart Deployment') {
             steps {
-                bat 'helm install java-deployment-master my-chart --set image=dtr.nagarro.com:443/i-abhishekgoyal-master'
+                bat 'kubectl create ns abhishek-master'
+                bat 'helm install java-deployment-master my-chart --set image=dtr.nagarro.com:443/i-abhishekgoyal-master -n abhishek-master'
             }
         }
     }
