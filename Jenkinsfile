@@ -101,7 +101,7 @@ pipeline
             steps 
             {
                 bat 'kubectl create ns abhishek-develop'
-                bat 'helm install java-deployment-develop my-chart --set image=dtr.nagarro.com:443/i-abhishekgoyal-develop'
+                bat 'helm install java-deployment-develop my-chart --set image=dtr.nagarro.com:443/i-abhishekgoyal-develop -n abhishek-develop'
             }
         }
     }
