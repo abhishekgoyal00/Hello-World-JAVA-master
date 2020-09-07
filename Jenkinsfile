@@ -24,13 +24,6 @@ pipeline
     }
     stages
     {
-        /*stage ('checkout')
-        {
-            steps
-            {
-                checkout scm
-            }
-        }*/
         stage ('Build')
         {
             steps
@@ -39,13 +32,6 @@ pipeline
                 bat "mvn clean install"
             }
         }
-        /*stage ('Unit Testing')
-        {
-            steps
-            {
-                bat "mvn test"
-            }
-        }*/
         stage ('Sonar Analysis')
         {
             steps
@@ -56,8 +42,10 @@ pipeline
                 }
             }
         }
-            stage('Upload to Artifactory') {
-            steps {
+        stage('Upload to Artifactory') 
+        {
+            steps 
+            {
                 rtMavenDeployer(
                     id: 'deployer',
                     serverId: '123456789@artifactory',
@@ -74,21 +62,13 @@ pipeline
                 )
             }
         }
-            stage('Docker Image') {
-            steps {
+        stage('Docker Image') 
+        {
+            steps 
+            {
                 bat returnStdout: true, script: 'docker build -t dtr.nagarro.com:443/i-abhishekgoyal-develop -f Dockerfile .'
             }
         }
-
-            /*stage ('Containers - Push to DTR') {         
-            steps{  
-                withCredentials([string(credentialsId: 'docker-pwd', variable: 'dockerHubPwd')]) {
-                    bat returnStdout: true, script: "docker login -u abhigoyaldev -p ${dockerHubPwd}"
-                }
-                bat returnStdout: true, script: 'docker push abhigoyaldev/i-abhishekgoyal-develop:%BUILD_NUMBER%'
-            }
-        }*/
-
         stage('Containers'){
             parallel{
                 stage('PrecontainerCheck'){
@@ -102,27 +82,25 @@ pipeline
                         }   
                     }
                 }
-                /*stage('PushtoDTR'){
-                    steps{
+                stage('PushtoDTR')
+                {
+                    steps
+                    {
                         bat returnStdout: true, script: 'docker push dtr.nagarro.com:443/i-abhishekgoyal-develop'
                     }
-                }*/
+                }
             }    
         }
-        /*stage('Stop Running container') {
-            steps {
-                bat '''@echo off for / f "tokens=*" % % i-abhishekgoyal-develop in ('docker ps -q --filter "name=abhigoyaldev/i-abhishekgoyal-develop"') do docker stop % % i-abhishekgoyal-develop && docker rm --force % % i-abhishekgoyal-develop || exit / b 0 '''
-            }
-        }*/
         stage('Docker deployment') {
-            steps {
+            steps 
+            {
                 bat 'docker run --name c-abhishekgoyal-develop -d -p 6100:8080 dtr.nagarro.com:443/i-abhishekgoyal-develop'
             }
         }
           stage('Helm Chart Deployment') {
-            steps {
-                bat 'kubectl create ns abhishek-develop'
-                bat 'helm install java-deployment-develop my-chart --set image=dtr.nagarro.com:443/i-abhishekgoyal-develop -n abhishek-develop'
+            steps 
+            {
+                bat 'helm install java-deployment-develop my-chart --set image=dtr.nagarro.com:443/i-abhishekgoyal-develop'
             }
         }
     }
