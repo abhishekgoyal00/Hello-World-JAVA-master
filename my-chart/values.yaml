@@ -1,2 +1,3 @@
 nodePort: 30158
 replicas: 1
+image: dtr.nagarro.com:443/i-abhishekgoyal-develop
