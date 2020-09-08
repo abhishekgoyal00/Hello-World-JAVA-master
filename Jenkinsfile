@@ -86,7 +86,7 @@ pipeline
         }
         stage('Docker deployment') {
             steps {
-                bat 'docker run --name c-abhishekgoyal-master -d -p 6000:8080 dtr.nagarro.com:443/i-abhishekgoyal-master'
+                bat 'docker run --name c-abhishekgoyal-master -d -p 6200:8080 dtr.nagarro.com:443/i-abhishekgoyal-master'
             }
         }
         stage('Helm Chart Deployment') {
